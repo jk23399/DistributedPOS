@@ -27,10 +27,31 @@ import com.jun.simplepos.ui.receipt.ReceiptPreviewScreen
 import com.jun.simplepos.ui.menu.BusinessProfileScreen
 import com.jun.simplepos.ui.menu.PrinterSettingsScreen
 import com.jun.simplepos.ui.sales.SalesScreen
+import android.util.Log
+import com.example.simplepos.data.MenuItem
+import com.example.simplepos.network.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        RetrofitClient.api.getMenus().enqueue(object : Callback<List<MenuItem>> {
+            override fun onResponse(call: Call<List<MenuItem>>, response: Response<List<MenuItem>>) {
+                if (response.isSuccessful) {
+                    Log.d("POS_TEST", "Connection Success. Menu count: ${response.body()?.size}")
+                } else {
+                    Log.d("POS_TEST", "Response Failed: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<MenuItem>>, t: Throwable) {
+                Log.d("POS_TEST", "Communication Error: ${t.message}")
+            }
+        })
+
         setContent {
             SimplePOSTheme(darkTheme = false) {
                 Surface(
