@@ -28,8 +28,8 @@ import com.jun.simplepos.ui.menu.BusinessProfileScreen
 import com.jun.simplepos.ui.menu.PrinterSettingsScreen
 import com.jun.simplepos.ui.sales.SalesScreen
 import android.util.Log
-import com.example.simplepos.data.MenuItem
-import com.example.simplepos.network.RetrofitClient
+import com.jun.simplepos.data.MenuItem
+import com.jun.simplepos.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

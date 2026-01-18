@@ -22,6 +22,17 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import com.jun.simplepos.network.RetrofitClient
+
+data class ServerOrderItem(
+    val orderId: Int,
+    val menuId: Int,
+    val menuName: String,
+    val price: Double,
+    val quantity: Int
+)
 
 data class CartItem(
     val menuItem: MenuItem,
@@ -167,6 +178,32 @@ class PosViewModel(
 
                 try {
                     printKitchenReceipts(cartForPrint, savedOrderId)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                try {
+                    withContext(Dispatchers.IO) {
+                        val order = com.jun.simplepos.data.Order(
+                            tableId = tableId,
+                            status = "PENDING"
+                        )
+                        val createdOrder = RetrofitClient.api.createOrder(order).execute().body()
+
+                        createdOrder?.id?.let { orderId ->
+                            val serverItems = newOrderItems.map { item ->
+                                ServerOrderItem(
+                                    orderId = orderId,
+                                    menuId = item.menuItemId ?: 0,
+                                    menuName = item.nameAtOrder,
+                                    price = item.priceAtOrder,
+                                    quantity = item.quantity
+                                )
+                            }
+
+                            RetrofitClient.api.addOrderItems(orderId, serverItems).execute()
+                        }
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

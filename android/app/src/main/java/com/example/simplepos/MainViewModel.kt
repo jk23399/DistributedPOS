@@ -7,8 +7,8 @@
 package com.example.simplepos
 
 import androidx.lifecycle.ViewModel
-import com.example.simplepos.data.MenuItem
-import com.example.simplepos.network.RetrofitClient
+import com.jun.simplepos.data.MenuItem
+import com.jun.simplepos.network.RetrofitClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Call

@@ -6,10 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.jun.simplepos.data.MenuItem
 import com.jun.simplepos.data.MenuItemRepository
 import com.jun.simplepos.data.TableInfo
+import com.jun.simplepos.network.RetrofitClient
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MenuViewModel(private val repository: MenuItemRepository) : ViewModel() {
 
@@ -36,14 +39,35 @@ class MenuViewModel(private val repository: MenuItemRepository) : ViewModel() {
 
     fun insert(item: MenuItem) = viewModelScope.launch {
         repository.insert(item)
+        try {
+            withContext(Dispatchers.IO) {
+                RetrofitClient.api.saveMenu(item).execute()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun update(item: MenuItem) = viewModelScope.launch {
         repository.update(item)
+        try {
+            withContext(Dispatchers.IO) {
+                RetrofitClient.api.saveMenu(item).execute()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun delete(item: MenuItem) = viewModelScope.launch {
         repository.delete(item)
+        try {
+            withContext(Dispatchers.IO) {
+                item.id?.let { RetrofitClient.api.deleteMenu(it).execute() }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun insert(tableInfo: TableInfo) = viewModelScope.launch {
