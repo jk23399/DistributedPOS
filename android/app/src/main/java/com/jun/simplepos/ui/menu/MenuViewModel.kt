@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
+import com.jun.simplepos.network.ServerMenuItem
 class MenuViewModel(private val repository: MenuItemRepository) : ViewModel() {
 
     val menuItems: StateFlow<List<MenuItem>> = repository.getAllMenuItems()
@@ -41,7 +41,16 @@ class MenuViewModel(private val repository: MenuItemRepository) : ViewModel() {
         repository.insert(item)
         try {
             withContext(Dispatchers.IO) {
-                RetrofitClient.api.saveMenu(item).execute()
+                val serverItem = ServerMenuItem(
+                    id = null,
+                    name = item.name,
+                    price = item.price,
+                    category = item.category,
+                    description = item.description,
+                    unit = item.unit,
+                    station = item.station
+                )
+                RetrofitClient.api.saveMenu(serverItem).execute()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -52,7 +61,16 @@ class MenuViewModel(private val repository: MenuItemRepository) : ViewModel() {
         repository.update(item)
         try {
             withContext(Dispatchers.IO) {
-                RetrofitClient.api.saveMenu(item).execute()
+                val serverItem = ServerMenuItem(
+                    id = null,
+                    name = item.name,
+                    price = item.price,
+                    category = item.category,
+                    description = item.description,
+                    unit = item.unit,
+                    station = item.station
+                )
+                RetrofitClient.api.saveMenu(serverItem).execute()
             }
         } catch (e: Exception) {
             e.printStackTrace()

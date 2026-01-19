@@ -33,13 +33,14 @@ import com.jun.simplepos.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.jun.simplepos.network.ServerMenuItem
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        RetrofitClient.api.getMenus().enqueue(object : Callback<List<MenuItem>> {
-            override fun onResponse(call: Call<List<MenuItem>>, response: Response<List<MenuItem>>) {
+        RetrofitClient.api.getMenus().enqueue(object : Callback<List<ServerMenuItem>> {
+            override fun onResponse(call: Call<List<ServerMenuItem>>, response: Response<List<ServerMenuItem>>) {
                 if (response.isSuccessful) {
                     Log.d("POS_TEST", "Connection Success. Menu count: ${response.body()?.size}")
                 } else {
@@ -47,7 +48,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<List<MenuItem>>, t: Throwable) {
+            override fun onFailure(call: Call<List<ServerMenuItem>>, t: Throwable) {
                 Log.d("POS_TEST", "Communication Error: ${t.message}")
             }
         })

@@ -3,7 +3,7 @@
  * It initializes MainViewModel to observe real-time menu data from the server
  * and renders the list of items on the screen.
  */
-package com.example.simplepos
+package com.jun.simplepos
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

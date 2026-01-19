@@ -1,7 +1,5 @@
 package com.jun.simplepos.network
 
-import com.jun.simplepos.data.MenuItem
-import com.jun.simplepos.data.Order
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,6 +9,23 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
+data class ServerMenuItem(
+    val id: Int? = null,
+    val name: String,
+    val price: Double,
+    val category: String? = null,
+    val description: String? = null,
+    val unit: String? = null,
+    val station: String = "Kitchen"
+)
+
+data class ServerOrder(
+    val id: Int? = null,
+    val tableId: Int,
+    val status: String = "PENDING",
+    val totalPrice: Double = 0.0
+)
+
 data class ServerOrderItem(
     val orderId: Int,
     val menuId: Int,
@@ -19,21 +34,35 @@ data class ServerOrderItem(
     val quantity: Int
 )
 
+data class ServerTableInfo(
+    val name: String,
+    val offsetX: Float,
+    val offsetY: Float,
+    val width: Float,
+    val height: Float
+)
+
 interface PosApi {
     @GET("api/menus")
-    fun getMenus(): Call<List<MenuItem>>
+    fun getMenus(): Call<List<ServerMenuItem>>
 
     @POST("/api/menus")
-    fun saveMenu(@Body menu: MenuItem): Call<MenuItem>
+    fun saveMenu(@Body menu: ServerMenuItem): Call<ServerMenuItem>
 
     @DELETE("/api/menus/{id}")
     fun deleteMenu(@Path("id") id: Int): Call<Void>
 
     @POST("/api/orders")
-    fun createOrder(@Body order: Order): Call<Order>
+    fun createOrder(@Body order: ServerOrder): Call<ServerOrder>
 
     @POST("/api/orders/{orderId}/items")
     fun addOrderItems(@Path("orderId") orderId: Int, @Body items: List<ServerOrderItem>): Call<List<ServerOrderItem>>
+
+    @POST("/api/tables")
+    fun saveTable(@Body table: ServerTableInfo): Call<ServerTableInfo>
+
+    @DELETE("/api/tables/{id}")
+    fun deleteTable(@Path("id") id: Int): Call<Void>
 }
 
 object RetrofitClient {

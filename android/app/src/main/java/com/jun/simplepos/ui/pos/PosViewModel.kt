@@ -11,6 +11,8 @@ import com.jun.simplepos.ui.receipt.PrinterManager
 import com.jun.simplepos.ui.receipt.ReceiptFormatter
 import com.jun.simplepos.ui.receipt.ReceiptData
 import com.jun.simplepos.ui.receipt.ReceiptItem
+import com.jun.simplepos.network.RetrofitClient
+import com.jun.simplepos.network.ServerOrderItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,15 +26,7 @@ import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import com.jun.simplepos.network.RetrofitClient
-
-data class ServerOrderItem(
-    val orderId: Int,
-    val menuId: Int,
-    val menuName: String,
-    val price: Double,
-    val quantity: Int
-)
+import com.jun.simplepos.network.ServerOrder
 
 data class CartItem(
     val menuItem: MenuItem,
@@ -184,7 +178,7 @@ class PosViewModel(
 
                 try {
                     withContext(Dispatchers.IO) {
-                        val order = com.jun.simplepos.data.Order(
+                        val order = ServerOrder(
                             tableId = tableId,
                             status = "PENDING"
                         )
