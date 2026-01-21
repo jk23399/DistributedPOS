@@ -14,7 +14,8 @@ class OrderController(
 ) {
     @PostMapping
     fun createOrder(@RequestBody order: Order): Order {
-        return orderRepo.save(order)
+        val newOrder = order.copy(id = null)
+        return orderRepo.save(newOrder)
     }
 
     @GetMapping

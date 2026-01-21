@@ -14,7 +14,8 @@ class MenuController(
 
     @PostMapping
     fun saveMenu(@RequestBody menu: MenuItem): MenuItem {
-        return repository.save(menu)
+        val newMenu = menu.copy(id = null)
+        return repository.save(newMenu)
     }
 
     @DeleteMapping("/{id}")
