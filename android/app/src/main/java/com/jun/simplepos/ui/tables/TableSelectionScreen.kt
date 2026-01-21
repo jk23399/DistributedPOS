@@ -38,7 +38,7 @@ fun TableSelectionScreen(
     onTableSelected: (Int) -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
-    val viewModel: FloorPlanViewModel = viewModel(factory = FloorPlanViewModelFactory(app.database.tableInfoDao(), app.database.orderDao()))
+    val viewModel: FloorPlanViewModel = viewModel(factory = FloorPlanViewModelFactory(app.repository, app.database.orderDao()))
     val tables by viewModel.tables.collectAsState()
     val openOrderTableIds by viewModel.openOrderTableIds.collectAsState()
 

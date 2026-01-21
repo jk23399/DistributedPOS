@@ -11,5 +11,6 @@ data class TableInfo(
     val offsetX: Float = 0f,
     val offsetY: Float = 0f,
     val width: Float = 100f, // default width
-    val height: Float = 100f // default height
+    val height: Float = 100f, // default height
+    val version: Long = 0 // Optimistic locking version field.
 )

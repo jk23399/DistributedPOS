@@ -31,7 +31,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun FloorPlanScreen(app: PosApplication, onTableClick: (Int) -> Unit) {
-    val viewModel: FloorPlanViewModel = viewModel(factory = FloorPlanViewModelFactory(app.database.tableInfoDao(), app.database.orderDao()))
+    val viewModel: FloorPlanViewModel = viewModel(factory = FloorPlanViewModelFactory(app.repository, app.database.orderDao()))
     val tables by viewModel.tables.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {

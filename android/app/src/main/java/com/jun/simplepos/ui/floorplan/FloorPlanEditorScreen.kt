@@ -52,10 +52,11 @@ fun FloorPlanEditorScreen(
     app: PosApplication,
     onNavigateBack: () -> Unit
 ) {
-    val viewModel: FloorPlanViewModel = viewModel(factory = FloorPlanViewModelFactory(app.database.tableInfoDao(), app.database.orderDao()))
+    val viewModel: FloorPlanViewModel = viewModel(factory = FloorPlanViewModelFactory(app.repository, app.database.orderDao()))
     val tablesFromDb by viewModel.tables.collectAsState()
 
     var internalTables by remember { mutableStateOf<Map<Int, TableInfo>>(emptyMap()) }
+    var modifiedTableIds by remember { mutableStateOf<Set<Int>>(emptySet()) }
     var showEditDialog by remember { mutableStateOf(false) }
     var selectedTable by remember { mutableStateOf<TableInfo?>(null) }
 
@@ -92,7 +93,9 @@ fun FloorPlanEditorScreen(
                 },
                 actions = {
                     TextButton(onClick = {
-                        internalTables.values.forEach { viewModel.updateTable(it) }
+                        modifiedTableIds.forEach { tableId ->
+                            internalTables[tableId]?.let { viewModel.updateTable(it) }
+                        }
                         onNavigateBack()
                     }) {
                         Text("Save")
@@ -117,6 +120,7 @@ fun FloorPlanEditorScreen(
                         table = table,
                         onUpdate = { updatedTable ->
                             internalTables = internalTables + (updatedTable.id to updatedTable)
+                            modifiedTableIds = modifiedTableIds + updatedTable.id
                         },
                         onLongPress = {
                             selectedTable = internalTables[table.id]

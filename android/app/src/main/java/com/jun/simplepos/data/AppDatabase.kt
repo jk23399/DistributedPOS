@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken
 
 @Database(
     entities = [MenuItem::class, TableInfo::class, Order::class, OrderItem::class],
-    version = 10,
+    version = 11,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 data class ServerMenuItem(
@@ -35,19 +36,27 @@ data class ServerOrderItem(
 )
 
 data class ServerTableInfo(
+    val id: Int? = null,
     val name: String,
     val offsetX: Float,
     val offsetY: Float,
     val width: Float,
-    val height: Float
+    val height: Float,
+    val version: Long = 0
 )
 
 interface PosApi {
     @GET("api/menus")
     fun getMenus(): Call<List<ServerMenuItem>>
 
+    @GET("/api/tables/{id}")
+    fun getTable(@Path("id") id: Int): Call<ServerTableInfo>
+
     @POST("/api/menus")
     fun saveMenu(@Body menu: ServerMenuItem): Call<ServerMenuItem>
+
+    @PUT("/api/tables/{id}")
+    fun updateTable(@Path("id") id: Int, @Body table: ServerTableInfo): Call<ServerTableInfo>
 
     @DELETE("/api/menus/{id}")
     fun deleteMenu(@Path("id") id: Int): Call<Void>
@@ -63,6 +72,7 @@ interface PosApi {
 
     @DELETE("/api/tables/{id}")
     fun deleteTable(@Path("id") id: Int): Call<Void>
+
 }
 
 object RetrofitClient {
